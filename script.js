@@ -7,9 +7,11 @@ function toggleMenu(){
   document.getElementById('nav').classList.toggle('open');
 }
 
-document.getElementById('year').textContent = new Date().getFullYear();
+document.getElementById('year').textContent =
+  new Date().getFullYear();
 
-const memberGrid = document.getElementById('memberGrid');
+const memberGrid =
+  document.getElementById('memberGrid');
 
 function esc(v){
   return String(v).replace(/[&<>"']/g,c=>({
@@ -22,17 +24,22 @@ function esc(v){
 }
 
 function card(m){
-  return `<article class="member">
-    <div class="avatar">${(m.name||'স').trim().charAt(0)}</div>
-    <div>
-      <h3>${esc(m.name||'')}</h3>
-      <p>${esc(m.profession||'সদস্য')}</p>
-      <small>সদস্য ID: ${esc(m.member_id||'')}</small>
-    </div>
-  </article>`;
+  return `
+    <article class="member">
+      <div class="avatar">
+        ${(m.name||'স').trim().charAt(0)}
+      </div>
+      <div>
+        <h3>${esc(m.name||'')}</h3>
+        <p>${esc(m.profession||'সদস্য')}</p>
+        <small>সদস্য ID: ${esc(m.member_id||'')}</small>
+      </div>
+    </article>
+  `;
 }
 
 async function loadMembers(){
+
   const {data,error} = await sb
     .from('members')
     .select('member_id,name,profession,created_at')
@@ -63,53 +70,72 @@ async function loadMembers(){
 
 loadMembers();
 
-document.getElementById('joinForm').addEventListener('submit', async e => {
-  e.preventDefault();
+document.getElementById('joinForm').addEventListener(
+  'submit',
+  async e => {
 
-  const form = e.currentTarget;
-  const msg = document.getElementById('formMsg');
-  const submitBtn = form.querySelector('button[type="submit"]');
+    e.preventDefault();
 
-  if(submitBtn) submitBtn.disabled = true;
+    const form = e.currentTarget;
+    const msg = document.getElementById('formMsg');
+    const submitBtn =
+      form.querySelector('button[type="submit"]');
 
-  msg.textContent = 'আবেদন জমা হচ্ছে...';
+    if(submitBtn){
+      submitBtn.disabled = true;
+    }
 
-  const fd = new FormData(form);
+    msg.textContent = 'আবেদন জমা হচ্ছে...';
 
-  const ref =
-    'EK-' +
-    new Date().getFullYear() +
-    '-' +
-    Math.random().toString(36).slice(2,8).toUpperCase();
+    const fd = new FormData(form);
 
-  const payload = {
-    member_id: ref,
-    name: String(fd.get('name') || '').trim(),
-    phone: String(fd.get('phone') || '').trim(),
-    profession: String(fd.get('profession') || '').trim(),
-    address: String(fd.get('address') || '').trim(),
-    bio: String(fd.get('bio') || '').trim(),
-    status: 'pending'
-  };
+    const ref =
+      'EK-' +
+      new Date().getFullYear() +
+      '-' +
+      Math.random()
+        .toString(36)
+        .slice(2,8)
+        .toUpperCase();
 
-  const {error} = await sb.from('members').insert(payload);
+    const payload = {
+      member_id: ref,
+      name: String(fd.get('name') || '').trim(),
+      phone: String(fd.get('phone') || '').trim(),
+      profession: String(fd.get('profession') || '').trim(),
+      address: String(fd.get('address') || '').trim(),
+      bio: String(fd.get('bio') || '').trim(),
+      status: 'pending'
+    };
 
-  if(error){
-    console.error(error);
+    const {error} =
+      await sb.from('members').insert(payload);
 
-    msg.textContent =
-      '❌ আবেদন জমা হয়নি। আবার চেষ্টা করুন।';
+    if(error){
 
-    if(submitBtn) submitBtn.disabled = false;
-    return;
+      console.error(error);
+
+      msg.textContent =
+        '❌ আবেদন জমা হয়নি। আবার চেষ্টা করুন।';
+
+      if(submitBtn){
+        submitBtn.disabled = false;
+      }
+
+      return;
+    }
+
+    form.reset();
+
+    msg.innerHTML =
+      '✅ <strong>আবেদন সফলভাবে জমা হয়েছে!</strong><br>' +
+      'আপনার আবেদন নম্বর: <strong>' +
+      ref +
+      '</strong><br>' +
+      'Admin অনুমোদনের পর সদস্য তালিকায় দেখা যাবে।';
+
+    if(submitBtn){
+      submitBtn.disabled = false;
+    }
   }
-
-  form.reset();
-
-  msg.innerHTML =
-    '✅ <strong>আবেদন সফলভাবে জমা হয়েছে!</strong><br>' +
-    'আপনার আবেদন নম্বর: <strong>' + ref + '</strong><br>' +
-    'Admin অনুমোদনের পর সদস্য তালিকায় দেখা যাবে।';
-
-  if(submitBtn) submitBtn.disabled = false;
-});
+);
