@@ -1,6 +1,643 @@
-<!doctype html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>একতা ফাউন্ডেশন | মানবতার পাশে</title><meta name="description" content="অসহায়, দরিদ্র ও সুবিধাবঞ্চিত মানুষের জন্য একতা ফাউন্ডেশন"><link rel="stylesheet" href="style.css"></head><body>
-<header class="top"><div class="wrap nav"><a class="brand" href="#home"><img src="logo.svg"><span>একতা ফাউন্ডেশন<small>মানবতার পাশে, একতার শক্তিতে</small></span></a><button class="menu" onclick="toggleMenu()">☰</button><nav id="nav"><a href="#home">হোম</a><a href="#about">আমাদের সম্পর্কে</a><a href="#activities">কার্যক্রম</a><a href="#members">সদস্যবৃন্দ</a><a href="#join">সদস্য হোন</a><a href="#contact">যোগাযোগ</a></nav></div></header>
-<main id="home"><section class="hero"><div class="wrap heroGrid"><div><span class="pill">🤝 মানবতার সেবায় অঙ্গীকার</span><h1>একসাথে গড়ি <em>মানবিক ও সুন্দর সমাজ</em></h1><p>অসহায়, দরিদ্র ও সুবিধাবঞ্চিত মানুষের পাশে দাঁড়ানো, চিকিৎসা ও শিক্ষা সহায়তা প্রদান এবং সমাজকর্মী তৈরি করাই আমাদের লক্ষ্য।</p><div class="actions"><a class="btn" href="#join">সদস্য হতে চাই</a><a class="btn ghost" href="#activities">আমাদের কার্যক্রম</a></div></div><div class="heroCard"><div class="bigIcon">❤</div><h3>মানুষ মানুষের জন্য</h3><p>আপনার ছোট্ট সহযোগিতাও একটি পরিবারের মুখে হাসি ফোটাতে পারে।</p></div></div></section>
-<section id="join" class="section alt"><div class="wrap formWrap"><div class="heading"><span>আমাদের সাথে যুক্ত হোন</span><h2>সদস্য হওয়ার ফর্ম</h2><p>ফর্ম পূরণ করলে তথ্য অনলাইন ডাটাবেসে জমা হবে। Admin অনুমোদনের পর সদস্য তালিকায় প্রকাশিত হবে।</p></div><form id="joinForm"><div class="two"><label>পূর্ণ নাম<input name="name" required placeholder="আপনার নাম"></label><label>মোবাইল নম্বর<input name="phone" required placeholder="01XXXXXXXXX"></label></div><div class="two"><label>পেশা<input name="profession" placeholder="পেশা"></label><label>ঠিকানা<input name="address" placeholder="ঠিকানা"></label></div><label>নিজের সম্পর্কে<textarea name="bio" rows="4" placeholder="আপনার সম্পর্কে সংক্ষেপে লিখুন"></textarea></label><label class="check"><input type="checkbox" required> আমি প্রদত্ত তথ্য সঠিক বলে নিশ্চিত করছি।</label><button class="btn" type="submit">আবেদন জমা দিন</button><p id="formMsg" class="msg"></p></form></div></section>
-<section id="contact" class="contact"><div class="wrap contactGrid"><div><span>যোগাযোগ</span><h2>একতা ফাউন্ডেশন</h2><p>মানবতার সেবায় আপনার সহযোগিতা ও অংশগ্রহণকে স্বাগত জানাই।</p></div><div><p>📞 <a href="tel:01822025360">01822025360</a></p><p>💬 <a href="https://wa.me/8801822025360">WhatsApp-এ যোগাযোগ</a></p><p>📧 info@ekotafoundation.org</p></div></div></section></main>
-<footer><div class="wrap">© <span id="year"></span> একতা ফাউন্ডেশন — সর্বস্বত্ব সংরক্ষিত। <a href="admin.html">Admin</a></div></footer><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="script.js"></script></body></html>
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>একতা ফাউন্ডেশন | মানবতার পাশে</title>
+
+<style>
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+ margin:0;
+ font-family:Arial,"Noto Sans Bengali",sans-serif;
+ background:#f3f8f6;
+ color:#123b32;
+}
+a{text-decoration:none;color:inherit}
+
+.top{
+ position:sticky;
+ top:0;
+ z-index:50;
+ background:#fff;
+ border-bottom:1px solid #dce9e4;
+}
+.nav{
+ max-width:1450px;
+ margin:auto;
+ min-height:72px;
+ display:flex;
+ align-items:center;
+ gap:25px;
+ padding:8px 22px;
+}
+.brand{
+ display:flex;
+ align-items:center;
+ gap:10px;
+ font-weight:800;
+ color:#075b48;
+ font-size:20px;
+ margin-right:auto;
+}
+.brand img{
+ width:52px;
+ height:52px;
+ object-fit:contain;
+}
+.brand small{
+ display:block;
+ font-size:11px;
+ color:#777;
+ font-weight:500;
+}
+.links{
+ display:flex;
+ gap:24px;
+ align-items:center;
+ font-size:14px;
+}
+.links a:hover{color:#07916d}
+.menu{
+ display:none;
+ border:0;
+ background:#075b48;
+ color:#fff;
+ border-radius:8px;
+ padding:9px 12px;
+ font-size:20px;
+}
+
+.dashboard{
+ max-width:1450px;
+ margin:auto;
+ display:grid;
+ grid-template-columns:225px 1fr;
+ min-height:calc(100vh - 72px);
+}
+
+.sidebar{
+ background:#064d3e;
+ color:#fff;
+ padding:20px 12px;
+}
+.side-title{
+ font-size:18px;
+ font-weight:bold;
+ padding:10px 12px 18px;
+ border-bottom:1px solid #327466;
+ margin-bottom:10px;
+}
+.side a{
+ display:block;
+ padding:13px 14px;
+ border-radius:8px;
+ margin:4px 0;
+ font-size:14px;
+}
+.side a.active,.side a:hover{
+ background:#0ca36f;
+}
+.content{
+ padding:18px;
+ min-width:0;
+}
+
+.hero{
+ background:linear-gradient(90deg,#075b48,#0a8065);
+ color:white;
+ border-radius:14px;
+ padding:28px;
+ display:grid;
+ grid-template-columns:1.5fr .8fr;
+ gap:20px;
+ overflow:hidden;
+}
+.hero h1{
+ font-size:38px;
+ margin:12px 0;
+}
+.hero p{
+ line-height:1.8;
+ margin-bottom:20px;
+}
+.badge{
+ display:inline-block;
+ border:1px solid #8be0c6;
+ border-radius:20px;
+ padding:7px 13px;
+ font-size:13px;
+}
+.btn{
+ display:inline-block;
+ background:#fff;
+ color:#075b48;
+ padding:11px 18px;
+ border-radius:8px;
+ font-weight:bold;
+ margin-right:8px;
+}
+.btn.green{
+ background:#10a878;
+ color:#fff;
+}
+.hero-card{
+ background:rgba(255,255,255,.13);
+ border-radius:14px;
+ padding:25px;
+ display:flex;
+ flex-direction:column;
+ justify-content:center;
+}
+.hero-card .icon{
+ font-size:45px;
+}
+
+.stats{
+ display:grid;
+ grid-template-columns:repeat(5,1fr);
+ gap:12px;
+ margin:15px 0;
+}
+.stat{
+ background:#fff;
+ border:1px solid #e1ece8;
+ border-radius:12px;
+ padding:18px;
+ display:flex;
+ align-items:center;
+ gap:13px;
+ box-shadow:0 3px 12px rgba(0,0,0,.04);
+}
+.stat-icon{
+ width:46px;
+ height:46px;
+ border-radius:50%;
+ background:#e4f7f0;
+ display:grid;
+ place-items:center;
+ font-size:22px;
+}
+.stat strong{
+ display:block;
+ font-size:22px;
+ color:#075b48;
+}
+.stat small{color:#777}
+
+.grid{
+ display:grid;
+ grid-template-columns:1.35fr .8fr;
+ gap:15px;
+}
+.card{
+ background:#fff;
+ border:1px solid #e1ece8;
+ border-radius:12px;
+ padding:18px;
+ box-shadow:0 3px 12px rgba(0,0,0,.04);
+}
+.card-head{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin-bottom:14px;
+}
+.card-head h2{
+ margin:0;
+ font-size:19px;
+}
+.card-head a{
+ color:#078b68;
+ font-size:13px;
+}
+
+.activities{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:10px;
+}
+.activity{
+ border:1px solid #e3ece9;
+ border-radius:9px;
+ overflow:hidden;
+ background:#fff;
+}
+.activity .photo{
+ height:100px;
+ background:linear-gradient(135deg,#ccefe3,#70cdb1);
+ display:grid;
+ place-items:center;
+ font-size:35px;
+}
+.activity div:last-child{
+ padding:9px;
+ font-size:13px;
+ font-weight:bold;
+}
+
+.leaders{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:12px;
+}
+.leader{
+ text-align:center;
+ border:1px solid #e2ece9;
+ border-radius:10px;
+ padding:14px 8px;
+}
+.avatar{
+ width:65px;
+ height:65px;
+ margin:auto;
+ border-radius:50%;
+ background:#dff4ed;
+ display:grid;
+ place-items:center;
+ font-size:25px;
+}
+.leader h3{
+ font-size:14px;
+ margin:8px 0 3px;
+}
+.leader p{
+ font-size:12px;
+ color:#078b68;
+ margin:0;
+}
+
+.quick{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:10px;
+ margin-top:15px;
+}
+.quick a{
+ background:#fff;
+ border:1px solid #e1ece8;
+ border-radius:10px;
+ padding:16px;
+ text-align:center;
+}
+.quick span{
+ display:block;
+ font-size:25px;
+ margin-bottom:7px;
+}
+.quick small{color:#555}
+
+.section{
+ max-width:1450px;
+ margin:15px auto;
+ padding:18px;
+}
+.section h2{
+ color:#075b48;
+}
+
+.form-box{
+ max-width:700px;
+ background:#fff;
+ padding:20px;
+ border-radius:12px;
+ border:1px solid #e1ece8;
+}
+.form-box input,.form-box textarea{
+ width:100%;
+ padding:12px;
+ margin:6px 0 12px;
+ border:1px solid #ccdcd7;
+ border-radius:7px;
+ font-size:14px;
+}
+.form-box textarea{min-height:100px}
+
+.contact{
+ background:#075b48;
+ color:#fff;
+}
+.contact a{color:#9ff0d5}
+
+footer{
+ background:#063d32;
+ color:#fff;
+ text-align:center;
+ padding:18px;
+ font-size:13px;
+}
+
+@media(max-width:900px){
+ .dashboard{grid-template-columns:1fr}
+ .sidebar{display:none}
+ .links{display:none}
+ .menu{display:block}
+ .hero{grid-template-columns:1fr}
+ .stats{grid-template-columns:repeat(2,1fr)}
+ .grid{grid-template-columns:1fr}
+ .activities{grid-template-columns:repeat(2,1fr)}
+}
+
+@media(max-width:520px){
+ .nav{padding:7px 12px}
+ .brand{font-size:16px}
+ .brand img{width:43px;height:43px}
+ .content{padding:10px}
+ .hero{padding:20px}
+ .hero h1{font-size:27px}
+ .stats{grid-template-columns:1fr 1fr}
+ .stat{padding:12px}
+ .stat strong{font-size:18px}
+ .activities{grid-template-columns:1fr 1fr}
+ .quick{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+
+<body>
+
+<header class="top">
+<div class="nav">
+
+<a class="brand" href="#home">
+<img src="logo.svg" alt="একতা ফাউন্ডেশন">
+<div>
+একতা ফাউন্ডেশন
+<small>মানবতার পাশে</small>
+</div>
+</a>
+
+<nav class="links">
+<a href="#home">হোম</a>
+<a href="#about">আমাদের সম্পর্কে</a>
+<a href="#activities">কার্যক্রম</a>
+<a href="#members">সদস্য তালিকা</a>
+<a href="#income">আয়-ব্যয়</a>
+<a href="#documents">ডকুমেন্ট</a>
+<a href="#contact">যোগাযোগ</a>
+</nav>
+
+<button class="menu" onclick="toggleMenu()">☰</button>
+
+</div>
+</header>
+
+<div class="dashboard">
+
+<aside class="sidebar">
+<div class="side-title">🌿 একতা ফাউন্ডেশন</div>
+
+<div class="side">
+<a class="active" href="#home">🏠 হোম</a>
+<a href="#about">👥 আমাদের সম্পর্কে</a>
+<a href="#activities">🤝 কার্যক্রম</a>
+<a href="#members">👤 সদস্য তালিকা</a>
+<a href="#income">💰 আয়-ব্যয় হিসাব</a>
+<a href="#documents">📄 ডকুমেন্ট</a>
+<a href="#contact">📞 যোগাযোগ</a>
+<a href="#join">📝 সদস্য হওয়ার ফর্ম</a>
+</div>
+</aside>
+
+<main class="content" id="home">
+
+<section class="hero">
+
+<div>
+<span class="badge">🤝 মানবতার সেবায় অঙ্গীকার</span>
+
+<h1>মানবতার সুন্দর সমাজ</h1>
+
+<p>
+একতা ফাউন্ডেশন অসহায়, দরিদ্র ও সুবিধাবঞ্চিত মানুষের পাশে
+দাঁড়ানোর জন্য কাজ করে। আসুন, সবাই মিলে একটি সুন্দর,
+মানবিক ও কল্যাণময় সমাজ গড়ে তুলি।
+</p>
+
+<a class="btn green" href="#join">সদস্য হতে চাই</a>
+<a class="btn" href="#activities">কার্যক্রম দেখুন</a>
+</div>
+
+<div class="hero-card">
+<div class="icon">💚</div>
+<h2>একসাথে গড়ি</h2>
+<p>মানুষ মানুষের জন্য—আপনার ছোট সহযোগিতাও একটি পরিবারের মুখে হাসি আনতে পারে।</p>
+</div>
+
+</section>
+
+<section class="stats">
+
+<div class="stat">
+<div class="stat-icon">👥</div>
+<div>
+<small>মোট সদস্য</small>
+<strong>১২৫ জন</strong>
+</div>
+</div>
+
+<div class="stat">
+<div class="stat-icon">✅</div>
+<div>
+<small>অনুমোদিত সদস্য</small>
+<strong>১০৮ জন</strong>
+</div>
+</div>
+
+<div class="stat">
+<div class="stat-icon">📋</div>
+<div>
+<small>মোট কার্যক্রম</small>
+<strong>২৫ টি</strong>
+</div>
+</div>
+
+<div class="stat">
+<div class="stat-icon">💰</div>
+<div>
+<small>মোট আয়</small>
+<strong>৳ ৩,৫০,০০০</strong>
+</div>
+</div>
+
+<div class="stat">
+<div class="stat-icon">💸</div>
+<div>
+<small>মোট ব্যয়</small>
+<strong>৳ ২,২০,০০০</strong>
+</div>
+</div>
+
+</section>
+
+<div class="grid">
+
+<section class="card" id="activities">
+
+<div class="card-head">
+<h2>📌 সাম্প্রতিক কার্যক্রম</h2>
+<a href="#activities">সব দেখুন →</a>
+</div>
+
+<div class="activities">
+
+<div class="activity">
+<div class="photo">🍚</div>
+<div>শীতবস্ত্র বিতরণ</div>
+</div>
+
+<div class="activity">
+<div class="photo">📚</div>
+<div>শিক্ষা সহায়তা</div>
+</div>
+
+<div class="activity">
+<div class="photo">🌱</div>
+<div>গাছের চারা বিতরণ</div>
+</div>
+
+<div class="activity">
+<div class="photo">🤲</div>
+<div>ইফতার বিতরণ</div>
+</div>
+
+</div>
+</section>
+
+<section class="card">
+
+<div class="card-head">
+<h2>👤 সভাপতি ও সাধারণ সম্পাদক</h2>
+</div>
+
+<div class="leaders">
+
+<div class="leader">
+<div class="avatar">👨</div>
+<h3>মোঃ তালহা সরদার</h3>
+<p>সভাপতি</p>
+</div>
+
+<div class="leader">
+<div class="avatar">👨</div>
+<h3>মোঃ ইব্রাহিম</h3>
+<p>সাধারণ সম্পাদক</p>
+</div>
+
+</div>
+</section>
+
+</div>
+
+<div class="quick">
+
+<a href="#members">
+<span>👥</span>
+সদস্য তালিকা
+<small>সকল সদস্য দেখুন</small>
+</a>
+
+<a href="#income">
+<span>💰</span>
+আয়-ব্যয় হিসাব
+<small>হিসাব দেখুন</small>
+</a>
+
+<a href="#documents">
+<span>📄</span>
+ডকুমেন্ট
+<small>প্রয়োজনীয় তথ্য</small>
+</a>
+
+</div>
+
+</main>
+</div>
+
+<section class="section" id="about">
+<h2>আমাদের সম্পর্কে</h2>
+<p>
+একতা ফাউন্ডেশন অসহায়, দরিদ্র ও সুবিধাবঞ্চিত মানুষের পাশে থেকে
+মানবিক সহায়তা ও সামাজিক উন্নয়নমূলক কার্যক্রম পরিচালনা করে।
+</p>
+</section>
+
+<section class="section" id="members">
+<h2>👥 সদস্য তালিকা</h2>
+<p>অনুমোদিত সদস্যদের তালিকা এখানে প্রদর্শিত হবে।</p>
+</section>
+
+<section class="section" id="income">
+<h2>💰 আয়-ব্যয় হিসাব</h2>
+<p>ফাউন্ডেশনের আয় ও ব্যয়ের তথ্য এখানে প্রকাশ করা হবে।</p>
+</section>
+
+<section class="section" id="documents">
+<h2>📄 ডকুমেন্ট</h2>
+<p>ফাউন্ডেশনের প্রয়োজনীয় ডকুমেন্ট এখানে রাখা হবে।</p>
+</section>
+
+<section class="section" id="join">
+<div class="form-box">
+<h2>📝 সদস্য হওয়ার ফর্ম</h2>
+<p>ফর্ম পূরণ করে একতা ফাউন্ডেশনের সাথে যুক্ত হতে পারেন।</p>
+
+<form id="joinForm">
+
+<label>পূর্ণ নাম</label>
+<input name="name" required placeholder="আপনার নাম">
+
+<label>মোবাইল নম্বর</label>
+<input name="phone" required placeholder="01XXXXXXXXX">
+
+<label>পেশা</label>
+<input name="profession" placeholder="পেশা">
+
+<label>ঠিকানা</label>
+<input name="address" placeholder="ঠিকানা">
+
+<label>নিজের সম্পর্কে</label>
+<textarea name="bio" placeholder="আপনার সম্পর্কে সংক্ষেপে লিখুন"></textarea>
+
+<label>
+<input type="checkbox" required>
+ আমি প্রদত্ত তথ্য সঠিক বলে নিশ্চিত করছি।
+</label>
+
+<br><br>
+
+<button class="btn green" type="submit">আবেদন জমা দিন</button>
+
+<p id="formMsg"></p>
+
+</form>
+</div>
+</section>
+
+<section class="section contact" id="contact">
+<h2 style="color:white">📞 যোগাযোগ</h2>
+<p>একতা ফাউন্ডেশন</p>
+<p>📱 <a href="tel:01822025360">01822025360</a></p>
+<p>💬 <a href="https://wa.me/8801822025360">WhatsApp-এ যোগাযোগ</a></p>
+</section>
+
+<footer>
+© <span id="year"></span> একতা ফাউন্ডেশন | মানবতার পাশে
+</footer>
+
+<script>
+function toggleMenu(){
+ alert("মোবাইল মেনু শীঘ্রই চালু হবে।");
+}
+
+document.getElementById("year").textContent=new Date().getFullYear();
+
+document.getElementById("joinForm").addEventListener("submit",function(e){
+ e.preventDefault();
+ document.getElementById("formMsg").textContent="আবেদন জমা দেওয়ার ব্যবস্থা পরবর্তী ধাপে সংযুক্ত করা হবে।";
+});
+</script>
+
+</body>
+  </html>
